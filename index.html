@@ -10,6 +10,285 @@
   <title>Trv7h's Launge | Eziokwu Bayem</title>
     
     <style>
+
+        /* Darker surfaces so the blue glow stands out */
+.panel {
+  background: rgba(3, 7, 14, 0.96);
+}
+
+.card {
+  background: rgba(2, 5, 11, 0.9);
+}
+
+.action,
+.nav-button {
+  background: rgba(3, 9, 18, 0.95);
+}
+
+/* Keep the grid subtle. */
+body::before {
+  opacity: 0.45;
+}
+
+/* Brighten the fluid against the darker background. */
+#fluid-background {
+  opacity: 0.8;
+}
+
+        
+        /* Scroll-reactive fluid background */
+body {
+  isolation: isolate;
+}
+
+#fluid-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+/* Keep the original background grid behind the fluid. */
+body::before {
+  z-index: -2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #fluid-background {
+    display: none;
+  }
+}
+        <script>
+(() => {
+  const canvas = document.getElementById("fluid-background");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const motionPreference = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  // Change these colors to match another suit later.
+  const colors = [
+    [56, 189, 248],
+    [103, 232, 249],
+    [37, 99, 235]
+  ];
+
+  let width = 0;
+  let height = 0;
+  let phase = 0;
+  let energy = 0;
+  let flow = 0;
+  let lastScroll = window.scrollY;
+  let lastTime = 0;
+  let frame = null;
+
+  function resizeCanvas() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    // Limit resolution to keep the background lightweight.
+    const scale = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    canvas.width = Math.round(width * scale);
+    canvas.height = Math.round(height * scale);
+
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    draw();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    if (motionPreference.matches) return;
+
+    ctx.globalCompositeOperation = "lighter";
+
+    // Soft pools of light.
+    for (let i = 0; i < 4; i++) {
+      const color = colors[i % colors.length];
+
+      const x = width * (
+        0.5 + Math.sin(phase * 0.7 + i * 1.8) * 0.34
+      );
+
+      const y = height * (
+        0.5 + Math.cos(phase * 0.5 + i * 1.4) * 0.3
+      );
+
+      const radius = Math.max(width, height) *
+        (0.28 + energy * 0.06);
+
+      const glow = ctx.createRadialGradient(
+        x, y, 0,
+        x, y, radius
+      );
+
+      glow.addColorStop(
+        0,
+        `rgba(${color.join(",")},${0.07 + energy * 0.07})`
+      );
+
+      glow.addColorStop(
+        0.5,
+        `rgba(${color.join(",")},0.025)`
+      );
+
+      glow.addColorStop(
+        1,
+        `rgba(${color.join(",")},0)`
+      );
+
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    // Layered flowing ribbons.
+    for (let ribbon = 0; ribbon < 7; ribbon++) {
+      const color = colors[ribbon % colors.length];
+      const baseY = height * (0.15 + ribbon * 0.115);
+      const amplitude = height * (0.035 + energy * 0.04);
+
+      ctx.beginPath();
+
+      for (let x = -20; x <= width + 20; x += 16) {
+        const position = x / Math.max(width, 1);
+
+        const y = baseY
+          + Math.sin(
+              position * Math.PI * 3 +
+              phase +
+              ribbon * 0.65
+            ) * amplitude
+          + Math.cos(
+              position * Math.PI * 5 -
+              phase * 0.6 +
+              ribbon
+            ) * amplitude * 0.35;
+
+        if (x === -20) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+
+      // Broad translucent ribbon.
+      ctx.strokeStyle =
+        `rgba(${color.join(",")},${0.012 + energy * 0.025})`;
+
+      ctx.lineWidth = 18 + energy * 22;
+      ctx.stroke();
+
+      // Fine illuminated edge.
+      ctx.strokeStyle =
+        `rgba(${color.join(",")},${0.06 + energy * 0.12})`;
+
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  function animate(time) {
+    const seconds = Math.min(
+      (time - lastTime) / 1000,
+      0.05
+    );
+
+    lastTime = time;
+
+    phase += flow * seconds * 1.8;
+
+    // The waves settle gradually after scrolling stops.
+    flow *= Math.exp(-seconds * 2.2);
+    energy *= Math.exp(-seconds * 1.7);
+
+    draw();
+
+    if (
+      !motionPreference.matches &&
+      (energy > 0.005 || Math.abs(flow) > 0.005)
+    ) {
+      frame = requestAnimationFrame(animate);
+    } else {
+      frame = null;
+      energy = 0;
+      flow = 0;
+      draw();
+    }
+  }
+
+  function reactToScroll(amount) {
+    if (motionPreference.matches || !amount) return;
+
+    const strength = Math.min(Math.abs(amount) / 100, 1);
+
+    energy = Math.min(1, energy + strength * 0.45);
+
+    flow = Math.max(
+      -2,
+      Math.min(
+        2,
+        flow + Math.sign(amount) * strength * 0.7
+      )
+    );
+
+    if (frame === null) {
+      lastTime = performance.now();
+      frame = requestAnimationFrame(animate);
+    }
+  }
+
+  // Handles mouse, touch, keyboard, and scrollbar scrolling.
+  window.addEventListener("scroll", () => {
+    const currentScroll = window.scrollY;
+    const difference = currentScroll - lastScroll;
+
+    lastScroll = currentScroll;
+    reactToScroll(difference);
+  }, { passive: true });
+
+  // Allows the effect to respond to a scroll gesture
+  // even when the page has reached its top or bottom.
+  window.addEventListener("wheel", event => {
+    const atTop = window.scrollY <= 0;
+
+    const atBottom =
+      window.scrollY + window.innerHeight >=
+      document.documentElement.scrollHeight - 2;
+
+    if (
+      (atTop && event.deltaY < 0) ||
+      (atBottom && event.deltaY > 0)
+    ) {
+      reactToScroll(event.deltaY);
+    }
+  }, { passive: true });
+
+  window.addEventListener("resize", resizeCanvas);
+
+  motionPreference.addEventListener("change", () => {
+    if (frame !== null) {
+      cancelAnimationFrame(frame);
+      frame = null;
+    }
+
+    energy = 0;
+    flow = 0;
+    draw();
+  });
+
+  resizeCanvas();
+})();
+</script>
     
 /* skin showcase */
 .skin-project {
@@ -77,7 +356,7 @@
 }
     
     :root {
-      --bg: #050c16;
+      --bg: #020409;
       --cyan: #67e8f9;
       --blue: #38bdf8;
       --text: #e5f5ff;
@@ -428,6 +707,7 @@
 </head>
 
 <body>
+    <canvas id="fluid-background" aria-hidden="true"></canvas>
   <div class="shell">
     <header>
       <div class="brand">TRV7H'S LAUNGE</div>
