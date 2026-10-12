@@ -8,7 +8,70 @@
   <meta name="theme-color" content="#050c16">
   <meta name="description" content="Eziokwu Bayem's personal website — Trv7h's Launge.">
   <title>Trv7h's Launge | Eziokwu Bayem</title>
+/* Minecraft skin showcase */
+.skin-project {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+}
 
+.skin-preview {
+  min-width: 0;
+  height: 360px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(56, 189, 248, .16),
+      transparent 70%
+    ),
+    linear-gradient(
+      rgba(103, 232, 249, .04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(103, 232, 249, .04) 1px,
+      transparent 1px
+    );
+  background-size: auto, 24px 24px, 24px 24px;
+}
+
+#minecraft-skin {
+  display: block;
+  max-width: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+#minecraft-skin:active {
+  cursor: grabbing;
+}
+
+.skin-details {
+  min-width: 0;
+}
+
+#skin-status {
+  font: 11px monospace;
+  color: var(--muted);
+}
+
+#skin-rotation:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+@media (max-width: 700px) {
+  .skin-project {
+    grid-template-columns: 1fr;
+  }
+}
   <style>
     :root {
       --bg: #050c16;
@@ -30,7 +93,7 @@
       line-height: 1.6;
     }
 
-    /* Background grid and atmospheric glow */
+            /* Background grid and atmospheric glow */
     body::before {
       content: "";
       position: fixed;
@@ -450,15 +513,42 @@
 
         <!-- EDIT: Replace these cards with your actual projects. -->
         <div class="cards">
-          <article class="card">
-            <span class="card-number">PROJECT / 001</span>
-            <h3>Trv7h's Launge</h3>
-            <p>
-              My personal website, designed as a futuristic
-              command center.
-            </p>
-            <span class="tag">IN DEVELOPMENT</span>
-          </article>
+          <<article class="card skin-project">
+  <div class="skin-preview">
+    <canvas
+      id="minecraft-skin"
+      aria-label="3D preview of Trv7h's custom Minecraft skin">
+      Your browser needs canvas support to show the skin.
+    </canvas>
+  </div>
+
+  <div class="skin-details">
+    <span class="card-number">PROJECT / 002</span>
+
+    <h3>My Custom Minecraft Skin</h3>
+    <span class="tag">Created by Trv7h</span>
+
+    <p>
+      My own Minecraft skin design.
+      Drag the character to view it from different angles.
+    </p>
+
+    <div class="actions">
+      <button
+        class="action primary"
+        id="skin-rotation"
+        type="button"
+        aria-pressed="false"
+        disabled>
+        ROTATION: OFF
+      </button>
+    </div>
+
+    <p id="skin-status" role="status">
+      Loading character preview…
+    </p>
+  </div>
+</article>
 
           <article class="card">
             <span class="card-number">PROJECT / 002</span>
@@ -587,6 +677,93 @@
     updateClock();
     setInterval(updateClock, 1000);
   </script>
+    <!-- Minecraft 3D viewer library -->
+<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
+
+<script>
+  (() => {
+    const canvas = document.getElementById("minecraft-skin");
+    const preview = document.querySelector(".skin-preview");
+    const status = document.getElementById("skin-status");
+    const rotationButton = document.getElementById("skin-rotation");
+
+    if (!canvas || !preview) return;
+
+    let viewer;
+
+    try {
+      if (!window.skinview3d) {
+        throw new Error("The viewer library did not load.");
+      }
+
+      viewer = new skinview3d.SkinViewer({
+        canvas: canvas,
+        width: 300,
+        height: 360
+      });
+
+      viewer.controls.enableRotate = true;
+      viewer.controls.enableZoom = false;
+      viewer.controls.enablePan = false;
+
+      viewer.zoom = 0.85;
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      viewer.autoRotate = !prefersReducedMotion;
+
+      function updateRotationButton() {
+        rotationButton.textContent =
+          viewer.autoRotate ? "ROTATION: ON" : "ROTATION: OFF";
+
+        rotationButton.setAttribute(
+          "aria-pressed",
+          String(viewer.autoRotate)
+        );
+      }
+
+      rotationButton.addEventListener("click", () => {
+        viewer.autoRotate = !viewer.autoRotate;
+        updateRotationButton();
+      });
+
+      // Resize when the Projects panel becomes visible.
+      const resizeObserver = new ResizeObserver(() => {
+        const width = Math.floor(preview.clientWidth);
+
+        if (width > 0) {
+          viewer.width = width;
+          viewer.height = 360;
+        }
+      });
+
+      resizeObserver.observe(preview);
+
+      // Change this filename if you upload a different skin file.
+      viewer.loadSkin("./finalskinFRFR.png")
+        .then(() => {
+          status.textContent = "PREVIEW READY // DRAG TO ROTATE";
+          rotationButton.disabled = false;
+          updateRotationButton();
+        })
+        .catch(error => {
+          console.error(error);
+          status.textContent =
+            "Skin could not load. Check the filename and use " +
+            "the original Minecraft skin PNG if available.";
+        });
+
+    } catch (error) {
+      console.error(error);
+
+      status.textContent =
+        "3D preview unavailable. Check your internet connection " +
+        "and that your browser supports WebGL.";
+    }
+  })();
+</script>
 </body>
 </html>.</p>
 
