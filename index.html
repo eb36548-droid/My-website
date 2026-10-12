@@ -1,369 +1,29 @@
-    <h1>Welcome to Trv7h's Launge!</h1>
-    <p><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050c16">
-  <meta name="description" content="Eziokwu Bayem's personal website — Trv7h's Launge.">
+  <meta name="theme-color" content="#020409">
+  <meta
+    name="description"
+    content="Eziokwu Bayem's personal website — Trv7h's Launge."
+  >
+
   <title>Trv7h's Launge | Eziokwu Bayem</title>
-    
-    <style>
 
-        /* Darker surfaces so the blue glow stands out */
-.panel {
-  background: rgba(3, 7, 14, 0.96);
-}
-
-.card {
-  background: rgba(2, 5, 11, 0.9);
-}
-
-.action,
-.nav-button {
-  background: rgba(3, 9, 18, 0.95);
-}
-
-/* Keep the grid subtle. */
-body::before {
-  opacity: 0.45;
-}
-
-/* Brighten the fluid against the darker background. */
-#fluid-background {
-  opacity: 0.8;
-}
-
-        
-        /* Scroll-reactive fluid background */
-body {
-  isolation: isolate;
-}
-
-#fluid-background {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.65;
-}
-
-/* Keep the original background grid behind the fluid. */
-body::before {
-  z-index: -2;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #fluid-background {
-    display: none;
-  }
-}
-        <script>
-(() => {
-  const canvas = document.getElementById("fluid-background");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  const motionPreference = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
-
-  // Change these colors to match another suit later.
-  const colors = [
-    [56, 189, 248],
-    [103, 232, 249],
-    [37, 99, 235]
-  ];
-
-  let width = 0;
-  let height = 0;
-  let phase = 0;
-  let energy = 0;
-  let flow = 0;
-  let lastScroll = window.scrollY;
-  let lastTime = 0;
-  let frame = null;
-
-  function resizeCanvas() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-
-    // Limit resolution to keep the background lightweight.
-    const scale = Math.min(window.devicePixelRatio || 1, 1.5);
-
-    canvas.width = Math.round(width * scale);
-    canvas.height = Math.round(height * scale);
-
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-    draw();
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    if (motionPreference.matches) return;
-
-    ctx.globalCompositeOperation = "lighter";
-
-    // Soft pools of light.
-    for (let i = 0; i < 4; i++) {
-      const color = colors[i % colors.length];
-
-      const x = width * (
-        0.5 + Math.sin(phase * 0.7 + i * 1.8) * 0.34
-      );
-
-      const y = height * (
-        0.5 + Math.cos(phase * 0.5 + i * 1.4) * 0.3
-      );
-
-      const radius = Math.max(width, height) *
-        (0.28 + energy * 0.06);
-
-      const glow = ctx.createRadialGradient(
-        x, y, 0,
-        x, y, radius
-      );
-
-      glow.addColorStop(
-        0,
-        `rgba(${color.join(",")},${0.07 + energy * 0.07})`
-      );
-
-      glow.addColorStop(
-        0.5,
-        `rgba(${color.join(",")},0.025)`
-      );
-
-      glow.addColorStop(
-        1,
-        `rgba(${color.join(",")},0)`
-      );
-
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, width, height);
-    }
-
-    // Layered flowing ribbons.
-    for (let ribbon = 0; ribbon < 7; ribbon++) {
-      const color = colors[ribbon % colors.length];
-      const baseY = height * (0.15 + ribbon * 0.115);
-      const amplitude = height * (0.035 + energy * 0.04);
-
-      ctx.beginPath();
-
-      for (let x = -20; x <= width + 20; x += 16) {
-        const position = x / Math.max(width, 1);
-
-        const y = baseY
-          + Math.sin(
-              position * Math.PI * 3 +
-              phase +
-              ribbon * 0.65
-            ) * amplitude
-          + Math.cos(
-              position * Math.PI * 5 -
-              phase * 0.6 +
-              ribbon
-            ) * amplitude * 0.35;
-
-        if (x === -20) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-
-      // Broad translucent ribbon.
-      ctx.strokeStyle =
-        `rgba(${color.join(",")},${0.012 + energy * 0.025})`;
-
-      ctx.lineWidth = 18 + energy * 22;
-      ctx.stroke();
-
-      // Fine illuminated edge.
-      ctx.strokeStyle =
-        `rgba(${color.join(",")},${0.06 + energy * 0.12})`;
-
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-
-    ctx.globalCompositeOperation = "source-over";
-  }
-
-  function animate(time) {
-    const seconds = Math.min(
-      (time - lastTime) / 1000,
-      0.05
-    );
-
-    lastTime = time;
-
-    phase += flow * seconds * 1.8;
-
-    // The waves settle gradually after scrolling stops.
-    flow *= Math.exp(-seconds * 2.2);
-    energy *= Math.exp(-seconds * 1.7);
-
-    draw();
-
-    if (
-      !motionPreference.matches &&
-      (energy > 0.005 || Math.abs(flow) > 0.005)
-    ) {
-      frame = requestAnimationFrame(animate);
-    } else {
-      frame = null;
-      energy = 0;
-      flow = 0;
-      draw();
-    }
-  }
-
-  function reactToScroll(amount) {
-    if (motionPreference.matches || !amount) return;
-
-    const strength = Math.min(Math.abs(amount) / 100, 1);
-
-    energy = Math.min(1, energy + strength * 0.45);
-
-    flow = Math.max(
-      -2,
-      Math.min(
-        2,
-        flow + Math.sign(amount) * strength * 0.7
-      )
-    );
-
-    if (frame === null) {
-      lastTime = performance.now();
-      frame = requestAnimationFrame(animate);
-    }
-  }
-
-  // Handles mouse, touch, keyboard, and scrollbar scrolling.
-  window.addEventListener("scroll", () => {
-    const currentScroll = window.scrollY;
-    const difference = currentScroll - lastScroll;
-
-    lastScroll = currentScroll;
-    reactToScroll(difference);
-  }, { passive: true });
-
-  // Allows the effect to respond to a scroll gesture
-  // even when the page has reached its top or bottom.
-  window.addEventListener("wheel", event => {
-    const atTop = window.scrollY <= 0;
-
-    const atBottom =
-      window.scrollY + window.innerHeight >=
-      document.documentElement.scrollHeight - 2;
-
-    if (
-      (atTop && event.deltaY < 0) ||
-      (atBottom && event.deltaY > 0)
-    ) {
-      reactToScroll(event.deltaY);
-    }
-  }, { passive: true });
-
-  window.addEventListener("resize", resizeCanvas);
-
-  motionPreference.addEventListener("change", () => {
-    if (frame !== null) {
-      cancelAnimationFrame(frame);
-      frame = null;
-    }
-
-    energy = 0;
-    flow = 0;
-    draw();
-  });
-
-  resizeCanvas();
-})();
-</script>
-    
-/* skin showcase */
-.skin-project {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 28px;
-  align-items: center;
-}
-
-.skin-preview {
-  min-width: 0;
-  height: 360px;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(56, 189, 248, .16),
-      transparent 70%
-    ),
-    linear-gradient(
-      rgba(103, 232, 249, .04) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(103, 232, 249, .04) 1px,
-      transparent 1px
-    );
-  background-size: auto, 24px 24px, 24px 24px;
-}
-
-#minecraft-skin {
-  display: block;
-  max-width: 100%;
-  touch-action: none;
-  cursor: grab;
-}
-
-#minecraft-skin:active {
-  cursor: grabbing;
-}
-
-.skin-details {
-  min-width: 0;
-}
-
-#skin-status {
-  font: 11px monospace;
-  color: var(--muted);
-}
-
-#skin-rotation:disabled {
-  opacity: .5;
-  cursor: wait;
-}
-
-@media (max-width: 700px) {
-  .skin-project {
-    grid-template-columns: 1fr;
-  }
-}
-    
+  <style>
     :root {
       --bg: #020409;
       --cyan: #67e8f9;
       --blue: #38bdf8;
       --text: #e5f5ff;
       --muted: #a0b6ca;
-      --border: rgba(103, 232, 249, .25);
+      --border: rgba(103, 232, 249, 0.25);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -372,38 +32,69 @@ body::before {
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
       line-height: 1.6;
+      isolation: isolate;
     }
 
-            /* Background grid and atmospheric glow */
+    /* Background grid */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      z-index: -1;
+      z-index: 0;
       pointer-events: none;
+      opacity: 0.45;
       background:
-        radial-gradient(ellipse at 75% 25%,
-          rgba(14, 165, 233, .15), transparent 55%),
-        linear-gradient(rgba(103, 232, 249, .035) 1px, transparent 1px),
-        linear-gradient(90deg,
-          rgba(103, 232, 249, .035) 1px, transparent 1px);
+        radial-gradient(
+          ellipse at 75% 25%,
+          rgba(14, 165, 233, 0.12),
+          transparent 55%
+        ),
+        linear-gradient(
+          rgba(103, 232, 249, 0.035) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(103, 232, 249, 0.035) 1px,
+          transparent 1px
+        );
       background-size: auto, 48px 48px, 48px 48px;
     }
 
-    button, a { -webkit-tap-highlight-color: transparent; }
+    /* Fluid sits above the grid, below the content. */
+    #fluid-background {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.85;
+    }
 
-    button { font: inherit; }
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(1120px, 92%);
+      margin: auto;
+    }
 
-    a { color: var(--cyan); }
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    a {
+      color: var(--cyan);
+    }
 
     :focus-visible {
       outline: 2px solid var(--cyan);
       outline-offset: 5px;
-    }
-
-    .shell {
-      width: min(1120px, 92%);
-      margin: auto;
     }
 
     header {
@@ -464,7 +155,7 @@ body::before {
 
     h1 span {
       color: var(--cyan);
-      text-shadow: 0 0 28px rgba(103, 232, 249, .3);
+      text-shadow: 0 0 28px rgba(103, 232, 249, 0.3);
     }
 
     .intro {
@@ -480,19 +171,24 @@ body::before {
       margin-top: 26px;
     }
 
-    .action, .nav-button {
+    .action,
+    .nav-button {
       border: 1px solid var(--border);
-      background: rgba(8, 28, 44, .75);
+      background: rgba(3, 9, 18, 0.95);
       color: var(--text);
       padding: 12px 18px;
       cursor: pointer;
-      transition: background .2s, box-shadow .2s, border-color .2s;
+      transition:
+        background 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
     }
 
-    .action:hover, .nav-button:hover {
-      background: rgba(56, 189, 248, .13);
+    .action:hover,
+    .nav-button:hover {
+      background: rgba(56, 189, 248, 0.13);
       border-color: var(--cyan);
-      box-shadow: 0 0 20px rgba(56, 189, 248, .12);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.12);
     }
 
     .primary {
@@ -518,7 +214,7 @@ body::before {
 
     .ring-one {
       inset: 0;
-      border: 1px dashed rgba(103, 232, 249, .45);
+      border: 1px dashed rgba(103, 232, 249, 0.45);
       animation: rotate 65s linear infinite;
     }
 
@@ -527,7 +223,7 @@ body::before {
       border: 3px solid transparent;
       border-top-color: var(--cyan);
       border-bottom-color: var(--blue);
-      box-shadow: 0 0 25px rgba(56, 189, 248, .12);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.12);
       animation: rotate 16s linear infinite reverse;
     }
 
@@ -543,20 +239,23 @@ body::before {
       aspect-ratio: 1;
       border-radius: 50%;
       border: 1px solid var(--border);
-      background: radial-gradient(circle,
-        rgba(56, 189, 248, .2), rgba(5, 12, 22, .9) 70%);
+      background: radial-gradient(
+        circle,
+        rgba(56, 189, 248, 0.2),
+        rgba(2, 4, 9, 0.95) 70%
+      );
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 35px rgba(56, 189, 248, .1);
+      box-shadow: inset 0 0 35px rgba(56, 189, 248, 0.1);
     }
 
     .initials {
       font-size: 58px;
       font-weight: bold;
       color: var(--cyan);
-      text-shadow: 0 0 25px rgba(103, 232, 249, .6);
+      text-shadow: 0 0 25px rgba(103, 232, 249, 0.6);
     }
 
     .core-label {
@@ -589,20 +288,21 @@ body::before {
 
     .nav-button[aria-current="true"] {
       border-color: var(--cyan);
-      background: rgba(56, 189, 248, .14);
+      background: rgba(56, 189, 248, 0.14);
       color: var(--cyan);
     }
 
     .panel {
       position: relative;
       border: 1px solid var(--border);
-      background: rgba(8, 20, 34, .9);
+      background: rgba(3, 7, 14, 0.96);
       padding: 30px;
       margin-bottom: 24px;
-      animation: reveal .35s ease-out;
+      animation: reveal 0.35s ease-out;
     }
 
-    .panel::before, .panel::after {
+    .panel::before,
+    .panel::after {
       content: "";
       position: absolute;
       width: 18px;
@@ -624,16 +324,22 @@ body::before {
       border-right: 2px solid var(--cyan);
     }
 
-    [hidden] { display: none !important; }
+    [hidden] {
+      display: none !important;
+    }
 
     h2 {
       margin: 8px 0 14px;
       font-size: 28px;
     }
 
-    h3 { margin: 0 0 10px; }
+    h3 {
+      margin: 0 0 10px;
+    }
 
-    .panel p { color: var(--muted); }
+    .panel p {
+      color: var(--muted);
+    }
 
     .cards {
       display: grid;
@@ -644,7 +350,7 @@ body::before {
 
     .card {
       border: 1px solid var(--border);
-      background: rgba(56, 189, 248, .035);
+      background: rgba(2, 5, 11, 0.9);
       padding: 22px;
     }
 
@@ -663,6 +369,65 @@ body::before {
       font: 10px monospace;
     }
 
+    /* Minecraft skin showcase */
+    .skin-project {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .skin-preview {
+      min-width: 0;
+      height: 360px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(56, 189, 248, 0.16),
+          transparent 70%
+        ),
+        linear-gradient(
+          rgba(103, 232, 249, 0.04) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(103, 232, 249, 0.04) 1px,
+          transparent 1px
+        );
+      background-size: auto, 24px 24px, 24px 24px;
+    }
+
+    #minecraft-skin {
+      display: block;
+      max-width: 100%;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    #minecraft-skin:active {
+      cursor: grabbing;
+    }
+
+    .skin-details {
+      min-width: 0;
+    }
+
+    #skin-status {
+      font: 11px monospace;
+      color: var(--muted);
+    }
+
+    #skin-rotation:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
     footer {
       display: flex;
       justify-content: space-between;
@@ -675,12 +440,21 @@ body::before {
     }
 
     @keyframes rotate {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes reveal {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 700px) {
@@ -690,26 +464,46 @@ body::before {
         padding: 38px 0 60px;
       }
 
-      .hologram { width: 260px; }
-      .cards { grid-template-columns: 1fr; }
-      .panel { padding: 24px; }
-      h1 { letter-spacing: -2px; }
+      .hologram {
+        width: 260px;
+      }
+
+      .cards,
+      .skin-project {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 24px;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         animation: none !important;
         transition: none !important;
+      }
+
+      #fluid-background {
+        display: none;
       }
     }
   </style>
 </head>
-    
-    <script>
-    <canvas id="fluid-background" aria-hidden="true"></canvas>
+
+<body>
+  <canvas id="fluid-background" aria-hidden="true"></canvas>
+
   <div class="shell">
     <header>
       <div class="brand">TRV7H'S LAUNGE</div>
+
       <div class="system">
         <span class="status-dot" aria-hidden="true"></span>
         <span>SYSTEM ONLINE</span>
@@ -722,19 +516,29 @@ body::before {
       <section class="hero" aria-labelledby="hero-title">
         <div>
           <div class="eyebrow">Personal interface // EB-01</div>
-          <h1 id="hero-title">Eziokwu<br><span>Bayem.</span></h1>
 
-          <!-- EDIT: Replace this introduction with your own words. -->
+          <h1 id="hero-title">
+            Eziokwu<br>
+            <span>Bayem.</span>
+          </h1>
+
           <p class="intro">
             Welcome to Trv7h's Launge—my personal corner of the
             internet. Explore my story, my ideas, and what I'm building.
           </p>
 
           <div class="actions">
-            <button class="action primary" data-open="about">
+            <button
+              class="action primary"
+              type="button"
+              data-open="about">
               EXPLORE MY WORLD ↗
             </button>
-            <button class="action" data-open="projects">
+
+            <button
+              class="action"
+              type="button"
+              data-open="projects">
               VIEW PROJECTS
             </button>
           </div>
@@ -744,96 +548,137 @@ body::before {
           <div class="ring ring-one"></div>
           <div class="ring ring-two"></div>
           <div class="ring ring-three"></div>
+
           <div class="core">
             <span class="initials">EB</span>
             <span class="core-label">PROFILE ACTIVE</span>
           </div>
-          <span class="holo-label">IDENTITY VERIFIED // EB-01</span>
+
+          <span class="holo-label">
+            IDENTITY VERIFIED // EB-01
+          </span>
         </div>
       </section>
 
       <nav aria-label="Explore my profile">
-        <button class="nav-button" data-open="about"
-          aria-controls="about" aria-current="true">
+        <button
+          class="nav-button"
+          type="button"
+          data-open="about"
+          aria-controls="about"
+          aria-current="true">
           01 / ABOUT
         </button>
-        <button class="nav-button" data-open="projects"
-          aria-controls="projects" aria-current="false">
+
+        <button
+          class="nav-button"
+          type="button"
+          data-open="projects"
+          aria-controls="projects"
+          aria-current="false">
           02 / PROJECTS
         </button>
-        <button class="nav-button" data-open="interests"
-          aria-controls="interests" aria-current="false">
+
+        <button
+          class="nav-button"
+          type="button"
+          data-open="interests"
+          aria-controls="interests"
+          aria-current="false">
           03 / INTERESTS
         </button>
-        <button class="nav-button" data-open="contact"
-          aria-controls="contact" aria-current="false">
+
+        <button
+          class="nav-button"
+          type="button"
+          data-open="contact"
+          aria-controls="contact"
+          aria-current="false">
           04 / CONTACT
         </button>
       </nav>
 
-      <section class="panel" id="about" aria-labelledby="about-title">
+      <section
+        class="panel"
+        id="about"
+        aria-labelledby="about-title">
         <div class="eyebrow">01 // Personal profile</div>
-        <h2 id="about-title">The person behind the interface.</h2>
 
-        <!-- EDIT: Write a few sentences about yourself here. -->
+        <h2 id="about-title">
+          The person behind the interface.
+        </h2>
+
         <p>
           I'm Eziokwu Bayem, and this is my digital home.
           This space is where I'll share the things I create,
           the ideas I explore, and the experiences that shape me.
-          all credits to me.
+          All credits to me.
         </p>
+
         <p>
           This website is a work in progress—just like my next big idea.
         </p>
+
         <span class="tag">STATUS: STILL EVOLVING</span>
       </section>
 
-      <section class="panel" id="projects" hidden
+      <section
+        class="panel"
+        id="projects"
+        hidden
         aria-labelledby="projects-title">
         <div class="eyebrow">02 // Project database</div>
+
         <h2 id="projects-title">Things I'm building.</h2>
-        <p>A space for experiments, creations, and future projects.</p>
 
-        <!-- EDIT: Replace these cards with your actual projects. -->
+        <p>
+          A space for experiments, creations, and future projects.
+        </p>
+
         <div class="cards">
-          <<article class="card skin-project">
-  <div class="skin-preview">
-    <canvas
-      id="minecraft-skin"
-      aria-label="3D preview of Trv7h's custom Minecraft skin">
-      Your browser needs canvas support to show the skin.
-    </canvas>
-  </div>
+          <article class="card skin-project">
+            <div class="skin-preview">
+              <canvas
+                id="minecraft-skin"
+                aria-label="3D preview of Trv7h's custom Minecraft skin">
+                Your browser needs canvas support to show the skin.
+              </canvas>
+            </div>
 
-  <div class="skin-details">
-    <span class="card-number">PROJECT / 001</span>
+            <div class="skin-details">
+              <span class="card-number">PROJECT / 001</span>
 
-    <h3>My Custom Minecraft Skin</h3>
-    <span class="tag">Created by Trv7h</span>
+              <h3>My Custom Minecraft Skin</h3>
 
-    <p>
-      Minecraft is one of my 2 favorite games as it is the foundation of my programming enthusiasm
-      My own Minecraft skin design. 
-      Design is based on Prince zuko from Avatar the last air bender.
-      Drag the character to view it from different angles.                    
-    </p>
+              <span class="tag">Created by Trv7h</span>
 
-    <div class="actions">
-      <button
-        class="action primary"
-        id="skin-rotation"
-        type="button"
-        aria-pressed="false"
-        disabled>
-        ROTATION: OFF
-      </button>
-    </div>
+              <p>
+                Minecraft is one of my two favorite games and
+                the foundation of my enthusiasm for programming.
+              </p>
 
-    <p id="skin-status" role="status">
-      Loading character preview…
-    </p>
-  </div>
-</article>
+              <p>
+                This is my own Minecraft skin design, inspired by
+                Prince Zuko from Avatar: The Last Airbender.
+                Drag the character to view it from different angles.
+              </p>
+
+              <div class="actions">
+                <button
+                  class="action primary"
+                  id="skin-rotation"
+                  type="button"
+                  aria-pressed="false"
+                  disabled>
+                  ROTATION: OFF
+                </button>
+              </div>
+
+              <p id="skin-status" role="status">
+                Loading character preview…
+              </p>
+            </div>
+          </article>
 
           <article class="card">
             <span class="card-number">PROJECT / 002</span>
@@ -851,13 +696,19 @@ body::before {
         </div>
       </section>
 
-      <section class="panel" id="interests" hidden
+      <section
+        class="panel"
+        id="interests"
+        hidden
         aria-labelledby="interests-title">
         <div class="eyebrow">03 // Exploration log</div>
-        <h2 id="interests-title">What catches my attention.</h2>
-        <p>Make these cards your own by adding your real interests.</p>
 
-        <!-- EDIT: Change these titles and descriptions. -->
+        <h2 id="interests-title">What catches my attention.</h2>
+
+        <p>
+          Make these cards your own by adding your real interests.
+        </p>
+
         <div class="cards">
           <article class="card">
             <span class="card-number">INTEREST / 001</span>
@@ -879,177 +730,425 @@ body::before {
         </div>
       </section>
 
-      <section class="panel" id="contact" hidden
+      <section
+        class="panel"
+        id="contact"
+        hidden
         aria-labelledby="contact-title">
         <div class="eyebrow">04 // Communication channel</div>
+
         <h2 id="contact-title">Let's connect.</h2>
+
         <p>
           Contact links are coming soon. This section will hold
           the email or public profiles I choose to share.
         </p>
-
-        <!-- OPTIONAL: Replace the address, then remove this comment.
-        <a class="action primary" href="mailto:you@example.com">
-          SEND AN EMAIL ↗
-        </a>
-        -->
       </section>
     </main>
 
     <footer>
-      <span>© <span id="year"></span> EZIOKWU BAYEM</span>
+      <span>
+        © <span id="year"></span> EZIOKWU BAYEM
+      </span>
+
       <span>PERSONAL INTERFACE // VERSION 1.0</span>
     </footer>
   </div>
 
+  <!-- Navigation and clock -->
   <script>
-    const panels = document.querySelectorAll(".panel");
-    const navButtons = document.querySelectorAll(".nav-button");
+    (() => {
+      const panels = document.querySelectorAll(".panel");
+      const navButtons = document.querySelectorAll(".nav-button");
 
-    function openPanel(id, moveToPanel = false) {
-      const target = document.getElementById(id);
-      if (!target) return;
+      function openPanel(id, moveToPanel = false) {
+        const target = document.getElementById(id);
+        if (!target) return;
 
-      panels.forEach(panel => {
-        panel.hidden = panel.id !== id;
-      });
-
-      navButtons.forEach(button => {
-        button.setAttribute(
-          "aria-current",
-          String(button.dataset.open === id)
-        );
-      });
-
-      if (moveToPanel) {
-        const reducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches;
-
-        target.scrollIntoView({
-          behavior: reducedMotion ? "instant" : "smooth",
-          block: "start"
+        panels.forEach(panel => {
+          panel.hidden = panel.id !== id;
         });
-      }
-    }
 
-    document.querySelectorAll("[data-open]").forEach(button => {
-      button.addEventListener("click", () => {
-        openPanel(
-          button.dataset.open,
-          button.classList.contains("action")
-        );
-      });
-    });
+        navButtons.forEach(button => {
+          button.setAttribute(
+            "aria-current",
+            String(button.dataset.open === id)
+          );
+        });
 
-    function updateClock() {
-      const now = new Date();
-      const clock = document.getElementById("clock");
+        if (moveToPanel) {
+          const reducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
 
-      clock.textContent = now.toLocaleTimeString([], {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      });
-
-      clock.dateTime = now.toISOString();
-    }
-
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-
-    updateClock();
-    setInterval(updateClock, 1000);
-  </script>
-    <!-- Minecraft 3D viewer library -->
-<script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
-
-<script>
-  (() => {
-    const canvas = document.getElementById("minecraft-skin");
-    const preview = document.querySelector(".skin-preview");
-    const status = document.getElementById("skin-status");
-    const rotationButton = document.getElementById("skin-rotation");
-
-    if (!canvas || !preview) return;
-
-    let viewer;
-
-    try {
-      if (!window.skinview3d) {
-        throw new Error("The viewer library did not load.");
-      }
-
-      viewer = new skinview3d.SkinViewer({
-        canvas: canvas,
-        width: 300,
-        height: 360
-      });
-
-      viewer.controls.enableRotate = true;
-      viewer.controls.enableZoom = false;
-      viewer.controls.enablePan = false;
-
-      viewer.zoom = 0.85;
-
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      viewer.autoRotate = !prefersReducedMotion;
-
-      function updateRotationButton() {
-        rotationButton.textContent =
-          viewer.autoRotate ? "ROTATION: ON" : "ROTATION: OFF";
-
-        rotationButton.setAttribute(
-          "aria-pressed",
-          String(viewer.autoRotate)
-        );
-      }
-
-      rotationButton.addEventListener("click", () => {
-        viewer.autoRotate = !viewer.autoRotate;
-        updateRotationButton();
-      });
-
-      // Resize when the Projects panel becomes visible.
-      const resizeObserver = new ResizeObserver(() => {
-        const width = Math.floor(preview.clientWidth);
-
-        if (width > 0) {
-          viewer.width = width;
-          viewer.height = 360;
+          target.scrollIntoView({
+            behavior: reducedMotion ? "auto" : "smooth",
+            block: "start"
+          });
         }
+      }
+
+      document.querySelectorAll("[data-open]").forEach(button => {
+        button.addEventListener("click", () => {
+          openPanel(
+            button.dataset.open,
+            button.classList.contains("action")
+          );
+        });
       });
 
-      resizeObserver.observe(preview);
+      function updateClock() {
+        const now = new Date();
+        const clock = document.getElementById("clock");
 
-      // Change this filename if you upload a different skin file.
-      viewer.loadSkin("./finalskinFRFR.png")
-        .then(() => {
-          status.textContent = "PREVIEW READY // DRAG TO ROTATE";
-          rotationButton.disabled = false;
-          updateRotationButton();
-        })
-        .catch(error => {
-          console.error(error);
-          status.textContent =
-            "Skin could not load. Check the filename and use " +
-            "the original Minecraft skin PNG if available.";
+        clock.textContent = now.toLocaleTimeString([], {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
         });
 
-    } catch (error) {
-      console.error(error);
+        clock.dateTime = now.toISOString();
+      }
 
-      status.textContent =
-        "3D preview unavailable. Check your internet connection " +
-        "and that your browser supports WebGL.";
-    }
-  })();
-</script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+      updateClock();
+      setInterval(updateClock, 1000);
+    })();
+  </script>
+
+  <!-- Scroll-reactive fluid background -->
+  <script>
+    (() => {
+      const canvas = document.getElementById("fluid-background");
+      if (!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const motionPreference = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      );
+
+      const colors = [
+        [56, 189, 248],
+        [103, 232, 249],
+        [37, 99, 235]
+      ];
+
+      let width = 0;
+      let height = 0;
+      let phase = 0;
+      let energy = 0;
+      let flow = 0;
+      let lastScroll = window.scrollY;
+      let lastTime = 0;
+      let frame = null;
+
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        const scale = Math.min(
+          window.devicePixelRatio || 1,
+          1.5
+        );
+
+        canvas.width = Math.round(width * scale);
+        canvas.height = Math.round(height * scale);
+
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        draw();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        if (motionPreference.matches) return;
+
+        ctx.globalCompositeOperation = "lighter";
+
+        /* Soft glowing pools */
+        for (let i = 0; i < 4; i++) {
+          const color = colors[i % colors.length];
+
+          const x = width * (
+            0.5 + Math.sin(phase * 0.7 + i * 1.8) * 0.34
+          );
+
+          const y = height * (
+            0.5 + Math.cos(phase * 0.5 + i * 1.4) * 0.3
+          );
+
+          const radius = Math.max(width, height) *
+            (0.28 + energy * 0.06);
+
+          const glow = ctx.createRadialGradient(
+            x, y, 0,
+            x, y, radius
+          );
+
+          glow.addColorStop(
+            0,
+            `rgba(${color.join(",")},${0.1 + energy * 0.12})`
+          );
+
+          glow.addColorStop(
+            0.5,
+            `rgba(${color.join(",")},0.035)`
+          );
+
+          glow.addColorStop(
+            1,
+            `rgba(${color.join(",")},0)`
+          );
+
+          ctx.fillStyle = glow;
+          ctx.fillRect(0, 0, width, height);
+        }
+
+        /* Flowing ribbons */
+        for (let ribbon = 0; ribbon < 7; ribbon++) {
+          const color = colors[ribbon % colors.length];
+          const baseY = height * (0.15 + ribbon * 0.115);
+          const amplitude = height * (0.035 + energy * 0.05);
+
+          ctx.beginPath();
+
+          for (let x = -20; x <= width + 20; x += 16) {
+            const position = x / Math.max(width, 1);
+
+            const y = baseY
+              + Math.sin(
+                  position * Math.PI * 3
+                  + phase
+                  + ribbon * 0.65
+                ) * amplitude
+              + Math.cos(
+                  position * Math.PI * 5
+                  - phase * 0.6
+                  + ribbon
+                ) * amplitude * 0.35;
+
+            if (x === -20) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+
+          ctx.strokeStyle =
+            `rgba(${color.join(",")},${0.018 + energy * 0.04})`;
+
+          ctx.lineWidth = 18 + energy * 22;
+          ctx.stroke();
+
+          ctx.strokeStyle =
+            `rgba(${color.join(",")},${0.09 + energy * 0.2})`;
+
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        }
+
+        ctx.globalCompositeOperation = "source-over";
+      }
+
+      function animate(time) {
+        const seconds = Math.min(
+          (time - lastTime) / 1000,
+          0.05
+        );
+
+        lastTime = time;
+
+        phase += flow * seconds * 1.8;
+
+        flow *= Math.exp(-seconds * 2.2);
+        energy *= Math.exp(-seconds * 1.7);
+
+        draw();
+
+        if (
+          !motionPreference.matches &&
+          (energy > 0.005 || Math.abs(flow) > 0.005)
+        ) {
+          frame = requestAnimationFrame(animate);
+        } else {
+          frame = null;
+          energy = 0;
+          flow = 0;
+          draw();
+        }
+      }
+
+      function reactToScroll(amount) {
+        if (motionPreference.matches || !amount) return;
+
+        const strength = Math.min(
+          Math.abs(amount) / 100,
+          1
+        );
+
+        energy = Math.min(
+          1,
+          energy + strength * 0.45
+        );
+
+        flow = Math.max(
+          -2,
+          Math.min(
+            2,
+            flow + Math.sign(amount) * strength * 0.7
+          )
+        );
+
+        if (frame === null) {
+          lastTime = performance.now();
+          frame = requestAnimationFrame(animate);
+        }
+      }
+
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.scrollY;
+        const difference = currentScroll - lastScroll;
+
+        lastScroll = currentScroll;
+        reactToScroll(difference);
+      }, { passive: true });
+
+      window.addEventListener("wheel", event => {
+        const atTop = window.scrollY <= 0;
+
+        const atBottom =
+          window.scrollY + window.innerHeight >=
+          document.documentElement.scrollHeight - 2;
+
+        if (
+          (atTop && event.deltaY < 0) ||
+          (atBottom && event.deltaY > 0)
+        ) {
+          const amount = event.deltaMode === 1
+            ? event.deltaY * 16
+            : event.deltaMode === 2
+              ? event.deltaY * window.innerHeight
+              : event.deltaY;
+
+          reactToScroll(amount);
+        }
+      }, { passive: true });
+
+      window.addEventListener("resize", resizeCanvas);
+
+      motionPreference.addEventListener("change", () => {
+        if (frame !== null) {
+          cancelAnimationFrame(frame);
+          frame = null;
+        }
+
+        energy = 0;
+        flow = 0;
+        draw();
+      });
+
+      resizeCanvas();
+    })();
+  </script>
+
+  <!-- Minecraft 3D viewer library -->
+  <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
+
+  <!-- Minecraft skin viewer -->
+  <script>
+    (() => {
+      const canvas = document.getElementById("minecraft-skin");
+      const preview = document.querySelector(".skin-preview");
+      const status = document.getElementById("skin-status");
+      const rotationButton = document.getElementById("skin-rotation");
+
+      if (!canvas || !preview) return;
+
+      try {
+        if (!window.skinview3d) {
+          throw new Error("The viewer library did not load.");
+        }
+
+        const viewer = new skinview3d.SkinViewer({
+          canvas: canvas,
+          width: 300,
+          height: 360
+        });
+
+        viewer.controls.enableRotate = true;
+        viewer.controls.enableZoom = false;
+        viewer.controls.enablePan = false;
+        viewer.zoom = 0.85;
+
+        const motionPreference = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        );
+
+        viewer.autoRotate = !motionPreference.matches;
+
+        function updateRotationButton() {
+          rotationButton.textContent =
+            viewer.autoRotate ? "ROTATION: ON" : "ROTATION: OFF";
+
+          rotationButton.setAttribute(
+            "aria-pressed",
+            String(viewer.autoRotate)
+          );
+        }
+
+        rotationButton.addEventListener("click", () => {
+          viewer.autoRotate = !viewer.autoRotate;
+          updateRotationButton();
+        });
+
+        motionPreference.addEventListener("change", event => {
+          if (event.matches) {
+            viewer.autoRotate = false;
+            updateRotationButton();
+          }
+        });
+
+        const resizeObserver = new ResizeObserver(() => {
+          const width = Math.floor(preview.clientWidth);
+
+          viewer.renderPaused = width === 0;
+
+          if (width > 0) {
+            viewer.width = width;
+            viewer.height = 360;
+          }
+        });
+
+        resizeObserver.observe(preview);
+
+        viewer.loadSkin("./finalskinFRFR.png")
+          .then(() => {
+            status.textContent =
+              "PREVIEW READY // DRAG TO ROTATE";
+
+            rotationButton.disabled = false;
+            updateRotationButton();
+          })
+          .catch(error => {
+            console.error(error);
+
+            status.textContent =
+              "Skin could not load. Check that finalskinFRFR.png " +
+              "is next to index.html and is a valid skin image.";
+          });
+
+      } catch (error) {
+        console.error(error);
+
+        status.textContent =
+          "3D preview unavailable. Check your internet connection " +
+          "and that your browser supports WebGL.";
+      }
+    })();
+  </script>
 </body>
-</html>.</p>
-
-
+</html>
