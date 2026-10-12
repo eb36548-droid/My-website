@@ -23,7 +23,595 @@
 <body>
 
     <h1>Welcome to Trv7h's Launge!</h1>
-    <p>Covenant sucks.</p>
+    <p><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050c16">
+  <meta name="description" content="Eziokwu Bayem's personal website — Trv7h's Launge.">
+  <title>Trv7h's Launge | Eziokwu Bayem</title>
+
+  <style>
+    :root {
+      --bg: #050c16;
+      --cyan: #67e8f9;
+      --blue: #38bdf8;
+      --text: #e5f5ff;
+      --muted: #a0b6ca;
+      --border: rgba(103, 232, 249, .25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Background grid and atmospheric glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 75% 25%,
+          rgba(14, 165, 233, .15), transparent 55%),
+        linear-gradient(rgba(103, 232, 249, .035) 1px, transparent 1px),
+        linear-gradient(90deg,
+          rgba(103, 232, 249, .035) 1px, transparent 1px);
+      background-size: auto, 48px 48px, 48px 48px;
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    button { font: inherit; }
+
+    a { color: var(--cyan); }
+
+    :focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 5px;
+    }
+
+    .shell {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
+
+    header {
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: var(--cyan);
+    }
+
+    .system {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font: 12px monospace;
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #86efac;
+      box-shadow: 0 0 12px #86efac;
+    }
+
+    .hero {
+      min-height: 460px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 35px;
+      padding: 50px 0;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font: 12px monospace;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1.05;
+      letter-spacing: -3px;
+    }
+
+    h1 span {
+      color: var(--cyan);
+      text-shadow: 0 0 28px rgba(103, 232, 249, .3);
+    }
+
+    .intro {
+      max-width: 470px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .action, .nav-button {
+      border: 1px solid var(--border);
+      background: rgba(8, 28, 44, .75);
+      color: var(--text);
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: background .2s, box-shadow .2s, border-color .2s;
+    }
+
+    .action:hover, .nav-button:hover {
+      background: rgba(56, 189, 248, .13);
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(56, 189, 248, .12);
+    }
+
+    .primary {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    /* Holographic core */
+    .hologram {
+      position: relative;
+      width: min(340px, 100%);
+      aspect-ratio: 1;
+      margin: auto;
+      display: grid;
+      place-items: center;
+    }
+
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .ring-one {
+      inset: 0;
+      border: 1px dashed rgba(103, 232, 249, .45);
+      animation: rotate 65s linear infinite;
+    }
+
+    .ring-two {
+      inset: 24px;
+      border: 3px solid transparent;
+      border-top-color: var(--cyan);
+      border-bottom-color: var(--blue);
+      box-shadow: 0 0 25px rgba(56, 189, 248, .12);
+      animation: rotate 16s linear infinite reverse;
+    }
+
+    .ring-three {
+      inset: 49px;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--cyan);
+      animation: rotate 24s linear infinite;
+    }
+
+    .core {
+      width: 58%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle,
+        rgba(56, 189, 248, .2), rgba(5, 12, 22, .9) 70%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 35px rgba(56, 189, 248, .1);
+    }
+
+    .initials {
+      font-size: 58px;
+      font-weight: bold;
+      color: var(--cyan);
+      text-shadow: 0 0 25px rgba(103, 232, 249, .6);
+    }
+
+    .core-label {
+      font: 10px monospace;
+      letter-spacing: 3px;
+      color: var(--muted);
+    }
+
+    .holo-label {
+      position: absolute;
+      bottom: -28px;
+      font: 11px monospace;
+      letter-spacing: 2px;
+      color: var(--cyan);
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 22px;
+    }
+
+    .nav-button {
+      flex: 1;
+      min-width: 120px;
+      font: 12px monospace;
+      letter-spacing: 1px;
+    }
+
+    .nav-button[aria-current="true"] {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, .14);
+      color: var(--cyan);
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--border);
+      background: rgba(8, 20, 34, .9);
+      padding: 30px;
+      margin-bottom: 24px;
+      animation: reveal .35s ease-out;
+    }
+
+    .panel::before, .panel::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .panel::before {
+      top: -1px;
+      left: -1px;
+      border-top: 2px solid var(--cyan);
+      border-left: 2px solid var(--cyan);
+    }
+
+    .panel::after {
+      bottom: -1px;
+      right: -1px;
+      border-bottom: 2px solid var(--cyan);
+      border-right: 2px solid var(--cyan);
+    }
+
+    [hidden] { display: none !important; }
+
+    h2 {
+      margin: 8px 0 14px;
+      font-size: 28px;
+    }
+
+    h3 { margin: 0 0 10px; }
+
+    .panel p { color: var(--muted); }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: rgba(56, 189, 248, .035);
+      padding: 22px;
+    }
+
+    .card-number {
+      display: block;
+      color: var(--cyan);
+      font: 11px monospace;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 9px;
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      font: 10px monospace;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 0 28px;
+      color: var(--muted);
+      font: 11px monospace;
+      letter-spacing: 1px;
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        padding: 38px 0 60px;
+      }
+
+      .hologram { width: 260px; }
+      .cards { grid-template-columns: 1fr; }
+      .panel { padding: 24px; }
+      h1 { letter-spacing: -2px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">TRV7H'S LAUNGE</div>
+      <div class="system">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>SYSTEM ONLINE</span>
+        <span aria-hidden="true">/</span>
+        <time id="clock" aria-label="Local time"></time>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <div class="eyebrow">Personal interface // EB-01</div>
+          <h1 id="hero-title">Eziokwu<br><span>Bayem.</span></h1>
+
+          <!-- EDIT: Replace this introduction with your own words. -->
+          <p class="intro">
+            Welcome to Trv7h's Launge—my personal corner of the
+            internet. Explore my story, my ideas, and what I'm building.
+          </p>
+
+          <div class="actions">
+            <button class="action primary" data-open="about">
+              EXPLORE MY WORLD ↗
+            </button>
+            <button class="action" data-open="projects">
+              VIEW PROJECTS
+            </button>
+          </div>
+        </div>
+
+        <div class="hologram" aria-hidden="true">
+          <div class="ring ring-one"></div>
+          <div class="ring ring-two"></div>
+          <div class="ring ring-three"></div>
+          <div class="core">
+            <span class="initials">EB</span>
+            <span class="core-label">PROFILE ACTIVE</span>
+          </div>
+          <span class="holo-label">IDENTITY VERIFIED // EB-01</span>
+        </div>
+      </section>
+
+      <nav aria-label="Explore my profile">
+        <button class="nav-button" data-open="about"
+          aria-controls="about" aria-current="true">
+          01 / ABOUT
+        </button>
+        <button class="nav-button" data-open="projects"
+          aria-controls="projects" aria-current="false">
+          02 / PROJECTS
+        </button>
+        <button class="nav-button" data-open="interests"
+          aria-controls="interests" aria-current="false">
+          03 / INTERESTS
+        </button>
+        <button class="nav-button" data-open="contact"
+          aria-controls="contact" aria-current="false">
+          04 / CONTACT
+        </button>
+      </nav>
+
+      <section class="panel" id="about" aria-labelledby="about-title">
+        <div class="eyebrow">01 // Personal profile</div>
+        <h2 id="about-title">The person behind the interface.</h2>
+
+        <!-- EDIT: Write a few sentences about yourself here. -->
+        <p>
+          I'm Eziokwu Bayem, and this is my digital home.
+          This space is where I'll share the things I create,
+          the ideas I explore, and the experiences that shape me.
+        </p>
+        <p>
+          This website is a work in progress—just like my next big idea.
+        </p>
+        <span class="tag">STATUS: STILL EVOLVING</span>
+      </section>
+
+      <section class="panel" id="projects" hidden
+        aria-labelledby="projects-title">
+        <div class="eyebrow">02 // Project database</div>
+        <h2 id="projects-title">Things I'm building.</h2>
+        <p>A space for experiments, creations, and future projects.</p>
+
+        <!-- EDIT: Replace these cards with your actual projects. -->
+        <div class="cards">
+          <article class="card">
+            <span class="card-number">PROJECT / 001</span>
+            <h3>Trv7h's Launge</h3>
+            <p>
+              My personal website, designed as a futuristic
+              command center.
+            </p>
+            <span class="tag">IN DEVELOPMENT</span>
+          </article>
+
+          <article class="card">
+            <span class="card-number">PROJECT / 002</span>
+            <h3>Your next project</h3>
+            <p>Replace this text with something you've created.</p>
+            <span class="tag">COMING SOON</span>
+          </article>
+
+          <article class="card">
+            <span class="card-number">PROJECT / 003</span>
+            <h3>Another idea</h3>
+            <p>Add a project, an achievement, or an experiment here.</p>
+            <span class="tag">COMING SOON</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="interests" hidden
+        aria-labelledby="interests-title">
+        <div class="eyebrow">03 // Exploration log</div>
+        <h2 id="interests-title">What catches my attention.</h2>
+        <p>Make these cards your own by adding your real interests.</p>
+
+        <!-- EDIT: Change these titles and descriptions. -->
+        <div class="cards">
+          <article class="card">
+            <span class="card-number">INTEREST / 001</span>
+            <h3>Your favorite hobby</h3>
+            <p>What do you enjoy doing when you have free time?</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">INTEREST / 002</span>
+            <h3>Something you're learning</h3>
+            <p>Write about a skill or topic you want to explore.</p>
+          </article>
+
+          <article class="card">
+            <span class="card-number">INTEREST / 003</span>
+            <h3>What inspires you</h3>
+            <p>Add something that motivates you to create or grow.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="contact" hidden
+        aria-labelledby="contact-title">
+        <div class="eyebrow">04 // Communication channel</div>
+        <h2 id="contact-title">Let's connect.</h2>
+        <p>
+          Contact links are coming soon. This section will hold
+          the email or public profiles I choose to share.
+        </p>
+
+        <!-- OPTIONAL: Replace the address, then remove this comment.
+        <a class="action primary" href="mailto:you@example.com">
+          SEND AN EMAIL ↗
+        </a>
+        -->
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> EZIOKWU BAYEM</span>
+      <span>PERSONAL INTERFACE // VERSION 1.0</span>
+    </footer>
+  </div>
+
+  <script>
+    const panels = document.querySelectorAll(".panel");
+    const navButtons = document.querySelectorAll(".nav-button");
+
+    function openPanel(id, moveToPanel = false) {
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      panels.forEach(panel => {
+        panel.hidden = panel.id !== id;
+      });
+
+      navButtons.forEach(button => {
+        button.setAttribute(
+          "aria-current",
+          String(button.dataset.open === id)
+        );
+      });
+
+      if (moveToPanel) {
+        const reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        target.scrollIntoView({
+          behavior: reducedMotion ? "instant" : "smooth",
+          block: "start"
+        });
+      }
+    }
+
+    document.querySelectorAll("[data-open]").forEach(button => {
+      button.addEventListener("click", () => {
+        openPanel(
+          button.dataset.open,
+          button.classList.contains("action")
+        );
+      });
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const clock = document.getElementById("clock");
+
+      clock.textContent = now.toLocaleTimeString([], {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      clock.dateTime = now.toISOString();
+    }
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>.</p>
 
 </body>
 </html>
