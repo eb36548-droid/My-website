@@ -1,2 +1,2 @@
-# My-website
-a website about me and my future
+# Personal Website
+contains projects, favorite activities and so much more
