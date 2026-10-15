@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Use UTF-8 so special characters display correctly. -->
   <meta charset="UTF-8">
+
+  <!-- Make the layout fit mobile screens properly. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta name="theme-color" content="#020409">
   <meta
     name="description"
     content="Eziokwu Bayem's personal website — Trv7h's Launge."
   >
 
-  <title>Trv7h's Launge /title>
+  <!-- This title appears in the browser tab. -->
+  <title>Trv7h's Launge</title>
 
   <style>
+    /*
+      Reusable colors.
+      var(--cyan), for example, uses the cyan value defined here.
+    */
     :root {
       --bg: #020409;
       --cyan: #67e8f9;
@@ -21,6 +30,7 @@
       --border: rgba(103, 232, 249, 0.25);
     }
 
+    /* Include padding and borders within an element's width. */
     * {
       box-sizing: border-box;
     }
@@ -33,9 +43,20 @@
       font-family: Arial, Helvetica, sans-serif;
       line-height: 1.6;
       isolation: isolate;
+
+      /*
+        Extra space allows the footer to scroll above the
+        floating music player instead of staying covered.
+      */
+      padding-bottom: 230px;
     }
 
-    /* Background grid */
+    /* Less extra space is needed when the player is minimized. */
+    body.music-minimized {
+      padding-bottom: 85px;
+    }
+
+    /* Decorative grid: layer 0. */
     body::before {
       content: "";
       position: fixed;
@@ -61,17 +82,20 @@
       background-size: auto, 48px 48px, 48px 48px;
     }
 
-    /* Fluid sits above the grid, below the content. */
+    /* Fluid background: layer 1, above the grid. */
     #fluid-background {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
+
+      /* Allow clicks to pass through to the page. */
       pointer-events: none;
       opacity: 0.85;
     }
 
+    /* Main website content: layer 2, above the backgrounds. */
     .shell {
       position: relative;
       z-index: 2;
@@ -92,6 +116,7 @@
       color: var(--cyan);
     }
 
+    /* Make keyboard focus clearly visible. */
     :focus-visible {
       outline: 2px solid var(--cyan);
       outline-offset: 5px;
@@ -130,6 +155,7 @@
       box-shadow: 0 0 12px #86efac;
     }
 
+    /* Two columns: introduction on the left, hologram on the right. */
     .hero {
       min-height: 460px;
       display: grid;
@@ -196,7 +222,7 @@
       border-color: var(--cyan);
     }
 
-    /* Holographic core */
+    /* Holographic centerpiece and rotating rings. */
     .hologram {
       position: relative;
       width: min(340px, 100%);
@@ -272,6 +298,7 @@
       color: var(--cyan);
     }
 
+    /* Navigation buttons wrap when the screen gets narrow. */
     nav {
       display: flex;
       gap: 10px;
@@ -301,6 +328,7 @@
       animation: reveal 0.35s ease-out;
     }
 
+    /* Small illuminated corners on each panel. */
     .panel::before,
     .panel::after {
       content: "";
@@ -324,6 +352,7 @@
       border-right: 2px solid var(--cyan);
     }
 
+    /* JavaScript uses hidden to switch between sections. */
     [hidden] {
       display: none !important;
     }
@@ -369,7 +398,7 @@
       font: 10px monospace;
     }
 
-    /* Minecraft skin showcase */
+    /* The skin showcase spans every column of the project grid. */
     .skin-project {
       grid-column: 1 / -1;
       display: grid;
@@ -438,75 +467,85 @@
       font: 11px monospace;
       letter-spacing: 1px;
     }
-.music-dock{
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 100;
-  width: min(360px, calc(100vw - 36px));
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: rgba(3, 7, 14, 0.97);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.6),
-    0 0 22px rgba(56, 189, 248, 0.12);
-}
 
-.music-dock-header  {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}    
+    /* ---------- FLOATING SPOTIFY PLAYER ---------- */
 
-#music-dock-title {
-  color: var(--cyan);
-  font: 10px monospace;
-  letter-spacing: 1.5px;
-}
+    .music-dock {
+      /* Stay in the same position while the website scrolls. */
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
 
-#music-toggle {
-  padding: 6px 9px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background:transparent;
-  color: var(--text);
-  font: 11px monospace;
-  cursor: pointer;
-}
+      /* Place the player above the page's other layers. */
+      z-index: 100;
 
-#music-toggle:hover {
-  border-color: var(--cyan);
-  color: var(--cyan);
-}
+      /* Fit small screens without exceeding 360 pixels. */
+      width: min(360px, calc(100vw - 36px));
 
-.music.dock.is-minimized #music-player-content {
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-}
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(3, 7, 14, 0.97);
 
-.music-dock.is-minimized .music-dock-header{
-  margin-bottom: 0;
-}
+      /* Multiple shadows are separated with a comma. */
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        0 0 22px rgba(56, 189, 248, 0.12);
+    }
 
-body {
-  padding-bottom: 230px;
-}
+    .music-dock-header {
+      /* Put the title and button on the same row. */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
 
-body.musicis-minimized {
-  padding-bottom: 85px;
-}
+    #music-dock-title {
+      color: var(--cyan);
+      font: 10px monospace;
+      letter-spacing: 1.5px;
+    }
 
-@media (max-width: 700px) {
-  .music-dock {
-    right: 12px;
-    bottom: 12px;
-    width: min(360px, calc(100vw - 24px));
-  }
-}
+    #music-toggle {
+      padding: 6px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text);
+      font: 11px monospace;
+      cursor: pointer;
+    }
+
+    #music-toggle:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .music-player-frame {
+      display: block;
+      width: 100%;
+      height: 152px;
+      border: 0;
+      border-radius: 12px;
+    }
+
+    /*
+      JavaScript adds is-minimized when the button is clicked.
+      Collapse the content without deleting or reloading the iframe.
+    */
+    .music-dock.is-minimized #music-player-content {
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
+    }
+
+    .music-dock.is-minimized .music-dock-header {
+      margin-bottom: 0;
+    }
+
+    /* ---------- ANIMATION AND MOBILE LAYOUT ---------- */
 
     @keyframes rotate {
       to {
@@ -549,8 +588,15 @@ body.musicis-minimized {
       h1 {
         letter-spacing: -2px;
       }
+
+      .music-dock {
+        right: 12px;
+        bottom: 12px;
+        width: min(360px, calc(100vw - 24px));
+      }
     }
 
+    /* Respect visitors who request less motion on their device. */
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -567,6 +613,7 @@ body.musicis-minimized {
 </head>
 
 <body>
+  <!-- Decorative drawing surface for the fluid background. -->
   <canvas id="fluid-background" aria-hidden="true"></canvas>
 
   <div class="shell">
@@ -597,6 +644,7 @@ body.musicis-minimized {
           </p>
 
           <div class="actions">
+            <!-- data-open tells JavaScript which section to display. -->
             <button
               class="action primary"
               type="button"
@@ -628,30 +676,6 @@ body.musicis-minimized {
           </span>
         </div>
       </section>
-<aside class="music-dock" aria-labelledby="music-dock-title">
-  <div class="music-dock-header">
-    <span id="music-dock-title"> TRV7H's SOUNDTRACK</span>
-
-      <button
-        id="music-toggle"
-        type="button"
-        aria-expanded="true"
-        aria-controls="music-player-content">
-      Minimize
-    </button>
-  </div>
-  
-  <div id="music-player-content">
-    <Iframe
-    title="Spotify player: What You Know by Two Door Cinema Club"
-    src="https://open.spotify.com/embed/track/4iZxeyibg6wEFCOoAQ6Eh?utm_source=generator&theme=0"
-    width="100%"
-    height="152"
-    style="display: block; border:0;border-radius: 12px;" 
-    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-  </Iframe>
-  </div>
-</aside>
 
       <nav aria-label="Explore my profile">
         <button
@@ -697,14 +721,12 @@ body.musicis-minimized {
         aria-labelledby="about-title">
         <div class="eyebrow">01 // Personal profile</div>
 
-        <h2 id="about-title">
-          The person behind the interface.
-        </h2>
+        <h2 id="about-title">The person behind the interface.</h2>
 
         <p>
           I'm Eziokwu Bayem, and this is my digital home.
           This space is where I'll share the things I create,
-          the ideas I come across, and the experiences that i've gained.
+          the ideas I come across, and the experiences that I've gained.
         </p>
 
         <p>
@@ -714,6 +736,7 @@ body.musicis-minimized {
         <span class="tag">STATUS: STILL EVOLVING</span>
       </section>
 
+      <!-- hidden keeps this section out of view until selected. -->
       <section
         class="panel"
         id="projects"
@@ -723,9 +746,7 @@ body.musicis-minimized {
 
         <h2 id="projects-title">Things I'm building.</h2>
 
-        <p>
-          A space for experiments, creations, and future projects.
-        </p>
+        <p>A space for experiments, creations, and future projects.</p>
 
         <div class="cards">
           <article class="card skin-project">
@@ -741,7 +762,6 @@ body.musicis-minimized {
               <span class="card-number">PROJECT / 001</span>
 
               <h3>My Custom Minecraft Skin</h3>
-
               <span class="tag">Created by Trv7h</span>
 
               <p>
@@ -797,9 +817,7 @@ body.musicis-minimized {
 
         <h2 id="interests-title">What catches my attention.</h2>
 
-        <p>
-          Make these cards your own by adding your real interests.
-        </p>
+        <p>Make these cards your own by adding your real interests.</p>
 
         <div class="cards">
           <article class="card">
@@ -839,28 +857,64 @@ body.musicis-minimized {
     </main>
 
     <footer>
-      <span>
-        © <span id="year"></span> EZIOKWU BAYEM
-      </span>
-
+      <span>© <span id="year"></span> EZIOKWU BAYEM</span>
       <span>PERSONAL INTERFACE // VERSION 1.0</span>
     </footer>
   </div>
 
+  <!--
+    Floating player is outside .shell.
+    Its CSS positions it independently of the main layout.
+  -->
+  <aside class="music-dock" aria-labelledby="music-dock-title">
+    <div class="music-dock-header">
+      <span id="music-dock-title">TRV7H'S SOUNDTRACK</span>
+
+      <button
+        id="music-toggle"
+        type="button"
+        aria-expanded="true"
+        aria-controls="music-player-content">
+        Minimize
+      </button>
+    </div>
+
+    <div id="music-player-content">
+      <!--
+        The iframe loads Spotify's player inside this page.
+        The track ID below matches your original song link.
+      -->
+      <iframe
+        class="music-player-frame"
+        title="Spotify player: What You Know by Two Door Cinema Club"
+        src="https://open.spotify.com/embed/track/4iZxeyibg6w4EFCOoAQ6Eh?utm_source=generator&theme=0"
+        width="100%"
+        height="152"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+      </iframe>
+    </div>
+  </aside>
+
   <!-- Navigation and clock -->
   <script>
     (() => {
-      const panels = document.querySelectorAll(".panel");
+      // Select only the four sections controlled by navigation.
+      const panels = document.querySelectorAll(
+        "#about, #projects, #interests, #contact"
+      );
+
       const navButtons = document.querySelectorAll(".nav-button");
 
       function openPanel(id, moveToPanel = false) {
         const target = document.getElementById(id);
         if (!target) return;
 
+        // Show the chosen panel and hide the others.
         panels.forEach(panel => {
           panel.hidden = panel.id !== id;
         });
 
+        // Highlight the matching navigation button.
         navButtons.forEach(button => {
           button.setAttribute(
             "aria-current",
@@ -880,6 +934,7 @@ body.musicis-minimized {
         }
       }
 
+      // Connect navigation and introduction buttons to openPanel.
       document.querySelectorAll("[data-open]").forEach(button => {
         button.addEventListener("click", () => {
           openPanel(
@@ -907,7 +962,50 @@ body.musicis-minimized {
         new Date().getFullYear();
 
       updateClock();
+
+      // 1000 milliseconds equals one second.
       setInterval(updateClock, 1000);
+    })();
+  </script>
+
+  <!-- Floating Spotify player's minimize/expand button -->
+  <script>
+    (() => {
+      const dock = document.querySelector(".music-dock");
+      const toggle = document.getElementById("music-toggle");
+      const content = document.getElementById("music-player-content");
+
+      if (!dock || !toggle || !content) return;
+
+      toggle.addEventListener("click", () => {
+        /*
+          toggle adds the class if absent, or removes it if present.
+          Its return value tells us whether the class is now present.
+        */
+        const minimized = dock.classList.toggle("is-minimized");
+
+        // Adjust the extra space beneath the website.
+        document.body.classList.toggle(
+          "music-minimized",
+          minimized
+        );
+
+        toggle.textContent = minimized ? "Expand" : "Minimize";
+
+        // Tell assistive technology whether the player is expanded.
+        toggle.setAttribute(
+          "aria-expanded",
+          String(!minimized)
+        );
+
+        // Prevent keyboard focus entering the collapsed player.
+        content.inert = minimized;
+
+        /*
+          We leave the iframe loaded.
+          This button does not send a pause or reload command.
+        */
+      });
     })();
   </script>
 
@@ -924,6 +1022,7 @@ body.musicis-minimized {
         "(prefers-reduced-motion: reduce)"
       );
 
+      // Each array contains red, green, and blue color values.
       const colors = [
         [56, 189, 248],
         [103, 232, 249],
@@ -943,6 +1042,7 @@ body.musicis-minimized {
         width = window.innerWidth;
         height = window.innerHeight;
 
+        // Limit drawing resolution to reduce background workload.
         const scale = Math.min(
           window.devicePixelRatio || 1,
           1.5
@@ -959,9 +1059,10 @@ body.musicis-minimized {
         ctx.clearRect(0, 0, width, height);
         if (motionPreference.matches) return;
 
+        // Overlapping colored shapes add light to each other.
         ctx.globalCompositeOperation = "lighter";
 
-        /* Soft glowing pools */
+        // Draw four soft pools of light.
         for (let i = 0; i < 4; i++) {
           const color = colors[i % colors.length];
 
@@ -1000,7 +1101,7 @@ body.musicis-minimized {
           ctx.fillRect(0, 0, width, height);
         }
 
-        /* Flowing ribbons */
+        // Draw seven ribbons using layered sine and cosine waves.
         for (let ribbon = 0; ribbon < 7; ribbon++) {
           const color = colors[ribbon % colors.length];
           const baseY = height * (0.15 + ribbon * 0.115);
@@ -1030,12 +1131,14 @@ body.musicis-minimized {
             }
           }
 
+          // Broad, faint ribbon.
           ctx.strokeStyle =
             `rgba(${color.join(",")},${0.018 + energy * 0.04})`;
 
           ctx.lineWidth = 18 + energy * 22;
           ctx.stroke();
 
+          // Narrow, brighter edge.
           ctx.strokeStyle =
             `rgba(${color.join(",")},${0.09 + energy * 0.2})`;
 
@@ -1053,9 +1156,9 @@ body.musicis-minimized {
         );
 
         lastTime = time;
-
         phase += flow * seconds * 1.8;
 
+        // Gradually reduce motion when scrolling stops.
         flow *= Math.exp(-seconds * 2.2);
         energy *= Math.exp(-seconds * 1.7);
 
@@ -1067,6 +1170,7 @@ body.musicis-minimized {
         ) {
           frame = requestAnimationFrame(animate);
         } else {
+          // Stop drawing new frames once the effect has settled.
           frame = null;
           energy = 0;
           flow = 0;
@@ -1087,6 +1191,7 @@ body.musicis-minimized {
           energy + strength * 0.45
         );
 
+        // Positive and negative values produce opposite directions.
         flow = Math.max(
           -2,
           Math.min(
@@ -1101,6 +1206,7 @@ body.musicis-minimized {
         }
       }
 
+      // React to actual page movement.
       window.addEventListener("scroll", () => {
         const currentScroll = window.scrollY;
         const difference = currentScroll - lastScroll;
@@ -1109,6 +1215,7 @@ body.musicis-minimized {
         reactToScroll(difference);
       }, { passive: true });
 
+      // Also react to wheel gestures at the page's top or bottom.
       window.addEventListener("wheel", event => {
         const atTop = window.scrollY <= 0;
 
@@ -1132,6 +1239,7 @@ body.musicis-minimized {
 
       window.addEventListener("resize", resizeCanvas);
 
+      // Stop the animation if reduced motion is enabled.
       motionPreference.addEventListener("change", () => {
         if (frame !== null) {
           cancelAnimationFrame(frame);
@@ -1147,7 +1255,7 @@ body.musicis-minimized {
     })();
   </script>
 
-  <!-- Minecraft 3D viewer library -->
+  <!-- Load the external Minecraft viewer before using it below. -->
   <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
 
   <!-- Minecraft skin viewer -->
@@ -1171,6 +1279,7 @@ body.musicis-minimized {
           height: 360
         });
 
+        // Allow dragging, but disable zoom and panning.
         viewer.controls.enableRotate = true;
         viewer.controls.enableZoom = false;
         viewer.controls.enablePan = false;
@@ -1204,9 +1313,11 @@ body.musicis-minimized {
           }
         });
 
+        // Resize the viewer when its container changes size.
         const resizeObserver = new ResizeObserver(() => {
           const width = Math.floor(preview.clientWidth);
 
+          // Pause rendering while the Projects section is hidden.
           viewer.renderPaused = width === 0;
 
           if (width > 0) {
@@ -1217,6 +1328,7 @@ body.musicis-minimized {
 
         resizeObserver.observe(preview);
 
+        // Keep this PNG beside index.html in your repository.
         viewer.loadSkin("./finalskinFRFR.png")
           .then(() => {
             status.textContent =
@@ -1240,31 +1352,7 @@ body.musicis-minimized {
           "3D preview unavailable. Check your internet connection " +
           "and that your browser supports WebGL.";
       }
-const dock = document.querySelector(".music-dock");
-const toggle = document. getElementById("music-toggle");
-const content = document.getElementById("music-player-content");
-
-if (!dock || !toggle || !content) return;
-
-
-toggle.addEventListener("click", () => {
-  const minimized = dock.classList.toggle("is-minimized");
-
-  document.body.classList.toggle(
-    "music-minimized",
-    minimized
-  );
-
-  toggle.textContent = minimized ? "Expand" : "Minimize";
-
-  toggle.setAttribute(
-    "aria-expanded",
-    String(!minimized)
-  );
-
-  content.inert = minimized;
-});
-  })();
+    })();
   </script>
 </body>
 </html>
