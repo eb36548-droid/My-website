@@ -9,7 +9,7 @@
     content="Eziokwu Bayem's personal website — Trv7h's Launge."
   >
 
-  <title>Trv7h's Launge | Eziokwu Bayem</title>
+  <title>Trv7h's Launge /title>
 
   <style>
     :root {
@@ -438,6 +438,75 @@
       font: 11px monospace;
       letter-spacing: 1px;
     }
+.music-dock{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 100;
+  width: min(360px, calc(100vw - 36px));
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(3, 7, 14, 0.97);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 22px rgba(56, 189, 248, 0.12);
+}
+
+.music-dock-header  {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}    
+
+#music-dock-title {
+  color: var(--cyan);
+  font: 10px monospace;
+  letter-spacing: 1.5px;
+}
+
+#music-toggle {
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background:transparent;
+  color: var(--text);
+  font: 11px monospace;
+  cursor: pointer;
+}
+
+#music-toggle:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.music.dock.is-minimized #music-player-content {
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.music-dock.is-minimized .music-dock-header{
+  margin-bottom: 0;
+}
+
+body {
+  padding-bottom: 230px;
+}
+
+body.musicis-minimized {
+  padding-bottom: 85px;
+}
+
+@media (max-width: 700px) {
+  .music-dock {
+    right: 12px;
+    bottom: 12px;
+    width: min(360px, calc(100vw - 24px));
+  }
+}
 
     @keyframes rotate {
       to {
@@ -515,11 +584,11 @@
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div>
-          <div class="eyebrow">Personal interface // EB-01</div>
+          <div class="eyebrow">Personal interface // T-07</div>
 
           <h1 id="hero-title">
-            Eziokwu<br>
-            <span>Bayem.</span>
+            Truth<br>
+            <span>Speakz.</span>
           </h1>
 
           <p class="intro">
@@ -559,13 +628,31 @@
           </span>
         </div>
       </section>
-<section class="panel" aria-labelledby="favorite-song-title">
-<div class="eyebrow">Audio Channel // Trv7h's sound track</div>
+<aside class="music-dock" aria-labelledby="music-dock-title">
+  <div class="music-dock-header">
+    <span id="music-dock-title"> TRV7H's SOUNDTRACK</span>
 
-
-
+      <button
+        id="music-toggle"
+        type="button"
+        aria-expanded="true"
+        aria-controls="music-player-content">
+      Minimize
+    </button>
+  </div>
   
-</section>
+  <div id="music-player-content">
+    <Iframe
+    title="Spotify player: What You Know by Two Door Cinema Club"
+    src="https://open.spotify.com/embed/track/4iZxeyibg6wEFCOoAQ6Eh?utm_source=generator&theme=0"
+    width="100%"
+    height="152"
+    style="display: block; border:0;border-radius: 12px;" 
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+  </Iframe>
+  </div>
+</aside>
+
       <nav aria-label="Explore my profile">
         <button
           class="nav-button"
@@ -617,8 +704,7 @@
         <p>
           I'm Eziokwu Bayem, and this is my digital home.
           This space is where I'll share the things I create,
-          the ideas I explore, and the experiences that shape me.
-          All credits to me.
+          the ideas I come across, and the experiences that i've gained.
         </p>
 
         <p>
@@ -1154,7 +1240,31 @@
           "3D preview unavailable. Check your internet connection " +
           "and that your browser supports WebGL.";
       }
-    })();
+const dock = document.querySelector(".music-dock");
+const toggle = document. getElementById("music-toggle");
+const content = document.getElementById("music-player-content");
+
+if (!dock || !toggle || !content) return;
+
+
+toggle.addEventListener("click", () => {
+  const minimized = dock.classList.toggle("is-minimized");
+
+  document.body.classList.toggle(
+    "music-minimized",
+    minimized
+  );
+
+  toggle.textContent = minimized ? "Expand" : "Minimize";
+
+  toggle.setAttribute(
+    "aria-expanded",
+    String(!minimized)
+  );
+
+  content.inert = minimized;
+});
+  })();
   </script>
 </body>
 </html>
