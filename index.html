@@ -1,26 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="day">
 <head>
-  <!-- Use UTF-8 so special characters display correctly. -->
+  
   <meta charset="UTF-8">
-
-  <!-- Make the layout fit mobile screens properly. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <meta name="theme-color" content="#020409">
   <meta
     name="description"
     content="Eziokwu Bayem's personal website — Trv7h's Launge."
   >
 
-  <!-- This title appears in the browser tab. -->
   <title>Trv7h's Launge</title>
+  <link rel="icon" type="image/png" href="./logo.png">
 
   <style>
-    /*
-      Reusable colors.
-      var(--cyan), for example, uses the cyan value defined here.
-    */
+
     :root {
       --bg: #020409;
       --cyan: #67e8f9;
@@ -29,8 +23,6 @@
       --muted: #a0b6ca;
       --border: rgba(103, 232, 249, 0.25);
     }
-
-    /* Include padding and borders within an element's width. */
     * {
       box-sizing: border-box;
     }
@@ -43,20 +35,13 @@
       font-family: Arial, Helvetica, sans-serif;
       line-height: 1.6;
       isolation: isolate;
-
-      /*
-        Extra space allows the footer to scroll above the
-        floating music player instead of staying covered.
-      */
       padding-bottom: 230px;
     }
 
-    /* Less extra space is needed when the player is minimized. */
     body.music-minimized {
       padding-bottom: 85px;
     }
 
-    /* Decorative grid: layer 0. */
     body::before {
       content: "";
       position: fixed;
@@ -82,7 +67,7 @@
       background-size: auto, 48px 48px, 48px 48px;
     }
 
-    /* Fluid background: layer 1, above the grid. */
+    
     #fluid-background {
       position: fixed;
       inset: 0;
@@ -95,7 +80,6 @@
       opacity: 0.85;
     }
 
-    /* Main website content: layer 2, above the backgrounds. */
     .shell {
       position: relative;
       z-index: 2;
@@ -116,7 +100,6 @@
       color: var(--cyan);
     }
 
-    /* Make keyboard focus clearly visible. */
     :focus-visible {
       outline: 2px solid var(--cyan);
       outline-offset: 5px;
@@ -137,6 +120,16 @@
       font-weight: bold;
       letter-spacing: 3px;
       color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .site-logo {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      flex-shrink: 0;
     }
 
     .system {
@@ -155,7 +148,6 @@
       box-shadow: 0 0 12px #86efac;
     }
 
-    /* Two columns: introduction on the left, hologram on the right. */
     .hero {
       min-height: 460px;
       display: grid;
@@ -221,8 +213,6 @@
       color: var(--cyan);
       border-color: var(--cyan);
     }
-
-    /* Holographic centerpiece and rotating rings. */
     .hologram {
       position: relative;
       width: min(340px, 100%);
@@ -297,8 +287,6 @@
       letter-spacing: 2px;
       color: var(--cyan);
     }
-
-    /* Navigation buttons wrap when the screen gets narrow. */
     nav {
       display: flex;
       gap: 10px;
@@ -328,7 +316,6 @@
       animation: reveal 0.35s ease-out;
     }
 
-    /* Small illuminated corners on each panel. */
     .panel::before,
     .panel::after {
       content: "";
@@ -352,7 +339,7 @@
       border-right: 2px solid var(--cyan);
     }
 
-    /* JavaScript uses hidden to switch between sections. */
+    
     [hidden] {
       display: none !important;
     }
@@ -398,7 +385,7 @@
       font: 10px monospace;
     }
 
-    /* The skin showcase spans every column of the project grid. */
+    
     .skin-project {
       grid-column: 1 / -1;
       display: grid;
@@ -468,33 +455,23 @@
       letter-spacing: 1px;
     }
 
-    /* ---------- FLOATING SPOTIFY PLAYER ---------- */
-
     .music-dock {
-      /* Stay in the same position while the website scrolls. */
       position: fixed;
       right: 18px;
       bottom: 18px;
 
-      /* Place the player above the page's other layers. */
       z-index: 100;
-
-      /* Fit small screens without exceeding 360 pixels. */
       width: min(360px, calc(100vw - 36px));
-
       padding: 12px;
       border: 1px solid var(--border);
       border-radius: 16px;
       background: rgba(3, 7, 14, 0.97);
-
-      /* Multiple shadows are separated with a comma. */
       box-shadow:
         0 12px 40px rgba(0, 0, 0, 0.6),
         0 0 22px rgba(56, 189, 248, 0.12);
     }
 
     .music-dock-header {
-      /* Put the title and button on the same row. */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -530,11 +507,6 @@
       border: 0;
       border-radius: 12px;
     }
-
-    /*
-      JavaScript adds is-minimized when the button is clicked.
-      Collapse the content without deleting or reloading the iframe.
-    */
     .music-dock.is-minimized #music-player-content {
       height: 0;
       overflow: hidden;
@@ -544,8 +516,6 @@
     .music-dock.is-minimized .music-dock-header {
       margin-bottom: 0;
     }
-
-    /* ---------- ANIMATION AND MOBILE LAYOUT ---------- */
 
     @keyframes rotate {
       to {
@@ -565,6 +535,7 @@
       }
     }
 
+    
     @media (max-width: 700px) {
       .hero {
         grid-template-columns: 1fr;
@@ -596,7 +567,7 @@
       }
     }
 
-    /* Respect visitors who request less motion on their device. */
+    
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -609,22 +580,107 @@
         display: none;
       }
     }
+
+    html[data-theme="day"] {
+      --bg: #edf3fa;
+      --cyan: #075985;
+      --blue: #0369a1;
+      --text: #102033;
+      --muted: #40546b;
+      --border: rgba(7, 89, 133, 0.3);
+    }
+
+    html[data-theme="day"] .panel {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    html[data-theme="day"] .card {
+      background: #f5f8fc;
+    }
+
+    html[data-theme="day"] .action,
+    html[data-theme="day"] .nav-button {
+      background: #ffffff;
+    }
+
+    html[data-theme="day"] .action:hover,
+    html[data-theme="day"] .nav-button:hover {
+      background: #dceefa;
+    }
+
+    html[data-theme="day"] .nav-button[aria-current="true"] {
+      background: #dceefa;
+    }
+
+    html[data-theme="day"] .music-dock {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow:
+        0 12px 40px rgba(16, 32, 51, 0.15),
+        0 0 22px rgba(3, 105, 161, 0.08);
+    }
+
+    html[data-theme="day"] .core {
+      background: radial-gradient(
+        circle,
+        #d5efff,
+        #f7fbff 75%
+      );
+    }
+
+    html[data-theme="day"] .skin-preview {
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(3, 105, 161, 0.12),
+          transparent 70%
+        ),
+        #edf3fa;
+    }
+
+    html[data-theme="day"] body::before {
+      background:
+        linear-gradient(
+          rgba(7, 89, 133, 0.08) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(7, 89, 133, 0.08) 1px,
+          transparent 1px
+        );
+      background-size: 48px 48px;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Decorative drawing surface for the fluid background. -->
   <canvas id="fluid-background" aria-hidden="true"></canvas>
 
   <div class="shell">
     <header>
-      <div class="brand">TRV7H'S LAUNGE</div>
+      <div class="brand">
+        <img
+          class="site-logo"
+          src="./logo.png"
+          alt=""
+          width="44"
+          height="44">
+        <span>TRV7H's LAUNGE</span>
+      </div>
 
       <div class="system">
         <span class="status-dot" aria-hidden="true"></span>
         <span>SYSTEM ONLINE</span>
         <span aria-hidden="true">/</span>
         <time id="clock" aria-label="Local time"></time>
+
+
+        <button
+          class="action"
+          id="theme-toggle"
+          type="button">
+          Switch to Night
+        </button>
       </div>
     </header>
 
@@ -644,7 +700,7 @@
           </p>
 
           <div class="actions">
-            <!-- data-open tells JavaScript which section to display. -->
+            
             <button
               class="action primary"
               type="button"
@@ -672,7 +728,7 @@
           </div>
 
           <span class="holo-label">
-            IDENTITY VERIFIED // EB-01
+            IDENTITY VERIFIED // EB-07
           </span>
         </div>
       </section>
@@ -736,7 +792,6 @@
         <span class="tag">STATUS: STILL EVOLVING</span>
       </section>
 
-      <!-- hidden keeps this section out of view until selected. -->
       <section
         class="panel"
         id="projects"
@@ -862,10 +917,6 @@
     </footer>
   </div>
 
-  <!--
-    Floating player is outside .shell.
-    Its CSS positions it independently of the main layout.
-  -->
   <aside class="music-dock" aria-labelledby="music-dock-title">
     <div class="music-dock-header">
       <span id="music-dock-title">TRV7H'S SOUNDTRACK</span>
@@ -880,10 +931,6 @@
     </div>
 
     <div id="music-player-content">
-      <!--
-        The iframe loads Spotify's player inside this page.
-        The track ID below matches your original song link.
-      -->
       <iframe
         class="music-player-frame"
         title="Spotify player: What You Know by Two Door Cinema Club"
@@ -895,10 +942,9 @@
     </div>
   </aside>
 
-  <!-- Navigation and clock -->
+  
   <script>
     (() => {
-      // Select only the four sections controlled by navigation.
       const panels = document.querySelectorAll(
         "#about, #projects, #interests, #contact"
       );
@@ -909,12 +955,12 @@
         const target = document.getElementById(id);
         if (!target) return;
 
-        // Show the chosen panel and hide the others.
+        
         panels.forEach(panel => {
           panel.hidden = panel.id !== id;
         });
 
-        // Highlight the matching navigation button.
+        
         navButtons.forEach(button => {
           button.setAttribute(
             "aria-current",
@@ -934,7 +980,6 @@
         }
       }
 
-      // Connect navigation and introduction buttons to openPanel.
       document.querySelectorAll("[data-open]").forEach(button => {
         button.addEventListener("click", () => {
           openPanel(
@@ -963,12 +1008,12 @@
 
       updateClock();
 
-      // 1000 milliseconds equals one second.
+      
       setInterval(updateClock, 1000);
     })();
   </script>
 
-  <!-- Floating Spotify player's minimize/expand button -->
+  
   <script>
     (() => {
       const dock = document.querySelector(".music-dock");
@@ -978,13 +1023,8 @@
       if (!dock || !toggle || !content) return;
 
       toggle.addEventListener("click", () => {
-        /*
-          toggle adds the class if absent, or removes it if present.
-          Its return value tells us whether the class is now present.
-        */
         const minimized = dock.classList.toggle("is-minimized");
 
-        // Adjust the extra space beneath the website.
         document.body.classList.toggle(
           "music-minimized",
           minimized
@@ -992,24 +1032,18 @@
 
         toggle.textContent = minimized ? "Expand" : "Minimize";
 
-        // Tell assistive technology whether the player is expanded.
         toggle.setAttribute(
           "aria-expanded",
           String(!minimized)
         );
 
-        // Prevent keyboard focus entering the collapsed player.
+        
         content.inert = minimized;
-
-        /*
-          We leave the iframe loaded.
-          This button does not send a pause or reload command.
-        */
       });
     })();
   </script>
 
-  <!-- Scroll-reactive fluid background -->
+  
   <script>
     (() => {
       const canvas = document.getElementById("fluid-background");
@@ -1022,7 +1056,6 @@
         "(prefers-reduced-motion: reduce)"
       );
 
-      // Each array contains red, green, and blue color values.
       const colors = [
         [56, 189, 248],
         [103, 232, 249],
@@ -1042,7 +1075,6 @@
         width = window.innerWidth;
         height = window.innerHeight;
 
-        // Limit drawing resolution to reduce background workload.
         const scale = Math.min(
           window.devicePixelRatio || 1,
           1.5
@@ -1059,10 +1091,9 @@
         ctx.clearRect(0, 0, width, height);
         if (motionPreference.matches) return;
 
-        // Overlapping colored shapes add light to each other.
         ctx.globalCompositeOperation = "lighter";
 
-        // Draw four soft pools of light.
+        // Draw soft pools of light.
         for (let i = 0; i < 4; i++) {
           const color = colors[i % colors.length];
 
@@ -1101,7 +1132,7 @@
           ctx.fillRect(0, 0, width, height);
         }
 
-        // Draw seven ribbons using layered sine and cosine waves.
+        // Draw the flowing ribbons.
         for (let ribbon = 0; ribbon < 7; ribbon++) {
           const color = colors[ribbon % colors.length];
           const baseY = height * (0.15 + ribbon * 0.115);
@@ -1131,14 +1162,12 @@
             }
           }
 
-          // Broad, faint ribbon.
           ctx.strokeStyle =
             `rgba(${color.join(",")},${0.018 + energy * 0.04})`;
 
           ctx.lineWidth = 18 + energy * 22;
           ctx.stroke();
 
-          // Narrow, brighter edge.
           ctx.strokeStyle =
             `rgba(${color.join(",")},${0.09 + energy * 0.2})`;
 
@@ -1158,7 +1187,7 @@
         lastTime = time;
         phase += flow * seconds * 1.8;
 
-        // Gradually reduce motion when scrolling stops.
+        // Gradually settle after scrolling stops.
         flow *= Math.exp(-seconds * 2.2);
         energy *= Math.exp(-seconds * 1.7);
 
@@ -1170,7 +1199,6 @@
         ) {
           frame = requestAnimationFrame(animate);
         } else {
-          // Stop drawing new frames once the effect has settled.
           frame = null;
           energy = 0;
           flow = 0;
@@ -1191,7 +1219,6 @@
           energy + strength * 0.45
         );
 
-        // Positive and negative values produce opposite directions.
         flow = Math.max(
           -2,
           Math.min(
@@ -1215,7 +1242,7 @@
         reactToScroll(difference);
       }, { passive: true });
 
-      // Also react to wheel gestures at the page's top or bottom.
+      // React to wheel gestures at the top or bottom too.
       window.addEventListener("wheel", event => {
         const atTop = window.scrollY <= 0;
 
@@ -1258,7 +1285,7 @@
   <!-- Load the external Minecraft viewer before using it below. -->
   <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.4.2/bundles/skinview3d.bundle.js"></script>
 
-  <!-- Minecraft skin viewer -->
+  <!-- Minecraft skin viewer. -->
   <script>
     (() => {
       const canvas = document.getElementById("minecraft-skin");
@@ -1328,7 +1355,6 @@
 
         resizeObserver.observe(preview);
 
-        // Keep this PNG beside index.html in your repository.
         viewer.loadSkin("./finalskinFRFR.png")
           .then(() => {
             status.textContent =
@@ -1352,6 +1378,37 @@
           "3D preview unavailable. Check your internet connection " +
           "and that your browser supports WebGL.";
       }
+    })();
+  </script>
+
+  <!-- Connect the existing day/night button to the theme CSS. -->
+  <script>
+    (() => {
+      const html = document.documentElement;
+      const button = document.getElementById("theme-toggle");
+
+      if (!button) return;
+
+      function updateButtonText() {
+        const isDay = html.getAttribute("data-theme") === "day";
+
+        // Name the mode that clicking the button will switch to.
+        button.textContent = isDay
+          ? "Switch to Night"
+          : "Switch to Day";
+      }
+
+      // Match the label to the theme when the page loads.
+      updateButtonText();
+
+      button.addEventListener("click", () => {
+        const isDay = html.getAttribute("data-theme") === "day";
+
+        // Activate either your day CSS or default night colors.
+        html.setAttribute("data-theme", isDay ? "night" : "day");
+
+        updateButtonText();
+      });
     })();
   </script>
 </body>
